@@ -11,11 +11,8 @@ public abstract class Creature
         set
         {
             if (_name != "Unknown") throw new InvalidOperationException("Name can only be set once.");
-            value = value.Trim();
-            if (value.Length < 3) value = value.PadRight(3, '#');
-            if (value.Length > 25) value = value.Substring(0, 25).TrimEnd();
-            if (value.Length < 3) value = value.PadRight(3, '#');
-            _name = char.ToUpper(value[0]) + value.Substring(1);
+            _name = Validator.Shortener(value, 3, 25, '#');
+            _name = char.ToUpper(_name[0]) + _name.Substring(1);
         }
     }
 
@@ -25,7 +22,7 @@ public abstract class Creature
         set
         {
             if (_level != 1) throw new InvalidOperationException("Level can only be set once.");
-            _level = Math.Clamp(value, 1, 10);
+            _level = Validator.Limiter(value, 1, 10);
         }
     }
 
@@ -39,7 +36,12 @@ public abstract class Creature
 
     public Creature() { }
 
-    public string Info => $"{Name} [{Level}]";
+    public abstract string Info { get; }
+
+    public override string ToString()
+    {
+        return $"{GetType().Name.ToUpper()}: {Info}";
+    }
 
     public virtual void SayHi()
     {

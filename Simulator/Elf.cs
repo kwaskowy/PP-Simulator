@@ -8,10 +8,13 @@ public class Elf : Creature
     public int Agility
     {
         get => _agility;
-        private set => _agility = Math.Clamp(value, 0, 10);
+        private set => _agility = Validator.Limiter(value, 0, 10);
     }
 
     public override int Power => 8 * Level + 2 * Agility;
+
+    public override string Info => $"{Name} [{Level}][{Agility}]";
+
 
     public Elf(string name = "Unknown", int level = 1, int agility = 1)
         : base(name, level)
