@@ -2,60 +2,31 @@
 
 internal class Program
 {
-    static void Lab4a()
+    static void Lab5a()
     {
-        Console.WriteLine("HUNT TEST\n");
-        var o = new Orc() { Name = "Gorbag" };
-        o.SayHi();
-        for (int i = 0; i < 10; i++)
+        try
         {
-            o.Hunt();
-            o.SayHi();
+            Rectangle rect1 = new Rectangle(3, 4, 7, 8);
+            Console.WriteLine(rect1);
+
+            Rectangle rect2 = new Rectangle(new Point(10, 15), new Point(5, 20));
+            Console.WriteLine(rect2);
+
+            Rectangle invalidRect = new Rectangle(5, 5, 5, 10);
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
         }
 
-        Console.WriteLine("\nSING TEST\n");
-        var e = new Elf("Legolas", agility: 2);
-        e.SayHi();
-        for (int i = 0; i < 10; i++)
-        {
-            e.Sing();
-            e.SayHi();
-        }
-
-        Console.WriteLine("\nPOWER TEST\n");
-        Creature[] creatures = {
-        o,
-        e,
-        new Orc("Morgash", 3, 8),
-        new Elf("Elandor", 5, 3)
-    };
-        foreach (Creature creature in creatures)
-        {
-            Console.WriteLine($"{creature.Name,-15}: {creature.Power}");
-        }
-    }
-    static void Lab4b()
-    {
-        object[] myObjects = {
-        new Animals() { Description = "dogs"},
-        new Birds { Description = "  eagles ", Size = 10 },
-        new Elf("e", 15, -3),
-        new Orc("morgash", 6, 4)
-    };
-        Console.WriteLine("\nMy objects:");
-        foreach (var o in myObjects) Console.WriteLine(o);
-        /*
-            My objects:
-            ANIMALS: Dogs <3>
-            BIRDS: Eagles (fly+) <10>
-            ELF: E## [10][0]
-            ORC: Morgash [6][4]
-        */
+        Rectangle rect3 = new Rectangle(0, 0, 10, 10);
+        Console.WriteLine(rect3.Contains(new Point(5, 5)));
+        Console.WriteLine(rect3.Contains(new Point(15, 5)));
+        Console.WriteLine(rect3.Contains(new Point(10, 10)));
     }
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
-        Lab4a();
-        Lab4b();
+        Lab5a();
     }
 }
