@@ -1,5 +1,7 @@
 ﻿namespace Simulator.Maps;
-
+/// <summary>
+/// Represents a map with square boundaries.
+/// </summary>
 public class SmallSquareMap : Map
 {
     public int Size { get; }

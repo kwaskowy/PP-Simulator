@@ -17,6 +17,9 @@ public class MapVisualizer
     public void Draw()
     {
         Console.Clear();
+
+        DrawLegend();
+
         var size = (_map as SmallSquareMap)?.Size ?? 0;
 
         Console.Write(Box.TopLeft);
@@ -36,7 +39,6 @@ public class MapVisualizer
             }
             Console.WriteLine(Box.Vertical);
         }
-
         Console.Write(Box.BottomLeft);
         for (int i = 0; i < size; i++)
         {
@@ -45,24 +47,37 @@ public class MapVisualizer
         Console.WriteLine(Box.BottomRight);
     }
 
+    private void DrawLegend()
+    {
+        Console.WriteLine("Legend:");
+        Console.WriteLine("O = Orc");
+        Console.WriteLine("E = Elf");
+        Console.WriteLine("X = Multiple creatures");
+        Console.WriteLine();
+    }
+
     private char GetSymbolAt(Point point)
     {
         var positions = _simulation.Positions;
         var creatures = _simulation.Creatures;
 
-        var creaturesAtPoint = positions
-            .Select((pos, index) => new { Position = pos, Creature = creatures[index] })
-            .Where(x => x.Position == point)
-            .ToList();
+        char symbol = ' ';
 
-        if (creaturesAtPoint.Count > 1)
+        int countAtPoint = 0;
+        foreach (var (position, index) in positions.Select((pos, idx) => (pos, idx)))
         {
-            return 'X';
+            if (position == point)
+            {
+                countAtPoint++;
+                symbol = creatures[index] is Orc ? 'O' : 'E';
+            }
         }
-        if (creaturesAtPoint.Count == 1)
+
+        if (countAtPoint > 1)
         {
-            return creaturesAtPoint.First().Creature is Orc ? 'O' : 'E';
+            symbol = 'X';
         }
-        return ' ';
+
+        return symbol;
     }
 }
