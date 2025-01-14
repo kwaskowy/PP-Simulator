@@ -1,6 +1,6 @@
 ﻿namespace Simulator;
 
-public class Animals
+public class Animals : IMappable
 {
     private string _description = "Default";
 

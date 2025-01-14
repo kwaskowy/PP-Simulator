@@ -1,6 +1,6 @@
 ﻿namespace Simulator;
 
-public abstract class Creature
+public abstract class Creature : IMappable
 { 
     private string _name = "Unknown";
     private int _level = 1;
@@ -71,4 +71,5 @@ public abstract class Creature
         var directions = DirectionParser.Parse(input);
         Go(directions);
     }
+    public string Description => $"{Name} (Level {Level})";
 }

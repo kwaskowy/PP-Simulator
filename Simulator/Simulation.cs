@@ -81,33 +81,55 @@ public class Simulation
     {
         if (Finished)
         {
-            throw new InvalidOperationException("The simulation is already finished.");
+            throw new InvalidOperationException("The simulation has already finished.");
         }
 
-        // Determine current move
-        var currentMoveChar = Moves[_currentMoveIndex % Moves.Length];
-        var currentDirection = DirectionParser.Parse(currentMoveChar.ToString()).FirstOrDefault();
+        // Pobierz aktualnego stwora i jego ruch
+        var currentCreature = CurrentCreature;
+        var currentMove = DirectionParser.Parse(CurrentMoveName).First();
 
-        // Get current creature and its position
-        var creatureIndex = _currentMoveIndex % Creatures.Count;
-        var currentPosition = Positions[creatureIndex];
+        // Pobierz indeks i pozycję aktualnego stwora
+        int index = Creatures.IndexOf(currentCreature);
+        var currentPosition = Positions[index];
 
-        // Compute the next position
-        var nextPosition = Map.Next(currentPosition, currentDirection);
+        // Oblicz nową pozycję
+        var newPosition = Map.Next(currentPosition, currentMove);
 
-        // Update position if valid
-        if (Map.Exist(nextPosition))
-        {
-            Positions[creatureIndex] = nextPosition;
-        }
+        // Przenieś stwora na mapie
+        Map.Remove(currentPosition, currentCreature);
+        Map.Add(newPosition, currentCreature);
 
-        // Increment move index
+        // Zaktualizuj pozycję w liście pozycji
+        Positions[index] = newPosition;
+
+        // Zaktualizuj indeks ruchu
         _currentMoveIndex++;
-
-        // Check if all moves have been processed
-        if (_currentMoveIndex >= Moves.Length * Creatures.Count)
+        if (_currentMoveIndex >= Moves.Length)
         {
-            Finished = true;
+            Finished = true; // Koniec ruchów
         }
     }
+    /// <summary>
+    /// Ustawia mapę na podstawie danych tury.
+    /// </summary>
+    /// <param name="snapshot">Dane tury.</param>
+    public void LoadTurn(SimulationHistory.TurnSnapshot snapshot)
+    {
+        // Wyczyszczenie całej mapy
+        foreach (var position in Positions)
+        {
+            Map.Remove(position, Creatures[Positions.IndexOf(position)]);
+        }
+
+        // Dodanie obiektów zgodnie z historią tury
+        foreach (var kvp in snapshot.Positions)
+        {
+            Map.Add(kvp.Value, kvp.Key);
+        }
+
+        // Zaktualizowanie listy pozycji
+        Positions.Clear();
+        Positions.AddRange(snapshot.Positions.Values);
+    }
+
 }

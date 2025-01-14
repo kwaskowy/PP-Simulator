@@ -6,6 +6,7 @@ public class SmallTorusMap : Map
 {
 
     public int Size { get; }
+    private readonly Dictionary<Point, List<IMappable>> _map;
 
     public SmallTorusMap(int size)
     {
@@ -35,4 +36,47 @@ public class SmallTorusMap : Map
         int y = (next.Y + Size) % Size;
         return new Point(x, y);
     }
+    public override List<IMappable> At(Point p)
+    {
+        Point wrappedPoint = WrapPoint(p);
+        return _map.ContainsKey(wrappedPoint) ? _map[wrappedPoint] : new List<IMappable>();
+    }
+    /// <summary>
+    /// Zawija punkt na toroidalnej mapie.
+    /// </summary>
+    /// <param name="p">Punkt do zawinięcia.</param>
+    /// <returns>Zawinięty punkt.</returns>
+    private Point WrapPoint(Point p)
+    {
+        int x = (p.X + Size) % Size;
+        int y = (p.Y + Size) % Size;
+        return new Point(x, y);
+    }
+
+    public override void Add(Point p, IMappable obj)
+    {
+        Point wrappedPoint = WrapPoint(p);
+
+        if (!_map.ContainsKey(wrappedPoint))
+        {
+            _map[wrappedPoint] = new List<IMappable>();
+        }
+
+        _map[wrappedPoint].Add(obj);
+    }
+
+    public override void Remove(Point p, IMappable obj)
+    {
+        Point wrappedPoint = WrapPoint(p);
+
+        if (_map.ContainsKey(wrappedPoint))
+        {
+            _map[wrappedPoint].Remove(obj);
+            if (_map[wrappedPoint].Count == 0)
+            {
+                _map.Remove(wrappedPoint);
+            }
+        }
+    }
+
 }

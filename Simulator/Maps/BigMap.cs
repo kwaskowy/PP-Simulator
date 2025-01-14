@@ -1,41 +1,40 @@
 ﻿namespace Simulator.Maps;
-/// <summary>
-/// Represents a map with square boundaries.
-/// </summary>
-public class SmallSquareMap : Map
+
+public class BigMap : Map
 {
-    public int Size { get; }
+    public int Width { get; }
+    public int Height { get; }
     private readonly Dictionary<Point, List<IMappable>> _map;
 
-    public SmallSquareMap(int size)
+    public BigMap(int width, int height)
     {
-        if (size < 5 || size > 20)
+        if (width <= 0 || width > 1000 || height <= 0 || height > 1000)
         {
-            throw new ArgumentOutOfRangeException(nameof(size), "Size must be between 5 and 20.");
+            throw new ArgumentOutOfRangeException("Width and height must be between 1 and 1000.");
         }
 
-        Size = size;
+        Width = width;
+        Height = height;
+        _map = new Dictionary<Point, List<IMappable>>();
     }
 
     public override bool Exist(Point p)
     {
-        return p.X >= 0 && p.X < Size && p.Y >= 0 && p.Y < Size;
+        return p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Height;
     }
 
     public override Point Next(Point p, Direction d)
     {
-        Point next = p.Next(d);
-        return Exist(next) ? next : p;
+        var nextPoint = p.Next(d);
+        return Exist(nextPoint) ? nextPoint : p;
     }
+
     public override Point NextDiagonal(Point p, Direction d)
     {
-        Point next = p.NextDiagonal(d);
-        return Exist(next) ? next : p;
+        var nextPoint = p.NextDiagonal(d);
+        return Exist(nextPoint) ? nextPoint : p;
     }
-    public override List<IMappable> At(Point p)
-    {
-        return _map.ContainsKey(p) ? _map[p] : new List<IMappable>();
-    }
+
     public override void Add(Point p, IMappable obj)
     {
         if (!Exist(p))
@@ -63,5 +62,11 @@ public class SmallSquareMap : Map
             }
         }
     }
+    public override List<IMappable> At(Point p)
+    {
+        return _map.ContainsKey(p) ? _map[p] : new List<IMappable>();
+    }
+
+
 
 }
