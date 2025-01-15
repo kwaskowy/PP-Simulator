@@ -4,7 +4,7 @@ public class BigMap : Map
 {
     public int Width { get; }
     public int Height { get; }
-    private readonly Dictionary<Point, List<IMappable>> _map;
+    private readonly Dictionary<Point, List<IMappable>> _map = new();
 
     public BigMap(int width, int height)
     {
@@ -15,7 +15,6 @@ public class BigMap : Map
 
         Width = width;
         Height = height;
-        _map = new Dictionary<Point, List<IMappable>>();
     }
 
     public override bool Exist(Point p)
@@ -23,17 +22,9 @@ public class BigMap : Map
         return p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Height;
     }
 
-    public override Point Next(Point p, Direction d)
-    {
-        var nextPoint = p.Next(d);
-        return Exist(nextPoint) ? nextPoint : p;
-    }
+    public override Point Next(Point p, Direction d) => p.Next(d);
 
-    public override Point NextDiagonal(Point p, Direction d)
-    {
-        var nextPoint = p.NextDiagonal(d);
-        return Exist(nextPoint) ? nextPoint : p;
-    }
+    public override Point NextDiagonal(Point p, Direction d) => p.NextDiagonal(d);
 
     public override void Add(Point p, IMappable obj)
     {
@@ -62,11 +53,9 @@ public class BigMap : Map
             }
         }
     }
+
     public override List<IMappable> At(Point p)
     {
         return _map.ContainsKey(p) ? _map[p] : new List<IMappable>();
     }
-
-
-
 }

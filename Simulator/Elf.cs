@@ -5,6 +5,11 @@ public class Elf : Creature
     private int _agility;
     private int _singCount = 0;
 
+    /// <summary>
+    /// Symbol reprezentujący Elfa na mapie.
+    /// </summary>
+    public override char Symbol => 'E';
+
     public int Agility
     {
         get => _agility;
@@ -14,7 +19,6 @@ public class Elf : Creature
     public override int Power => 8 * Level + 2 * Agility;
 
     public override string Info => $"{Name} [{Level}][{Agility}]";
-
 
     public Elf(string name = "Unknown", int level = 1, int agility = 1)
         : base(name, level)
@@ -35,5 +39,10 @@ public class Elf : Creature
         {
             Agility++;
         }
+    }
+
+    public override string ToString()
+    {
+        return $"{Name} (Agility: {Agility})";
     }
 }

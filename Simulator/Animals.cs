@@ -3,6 +3,7 @@
 public class Animals : IMappable
 {
     private string _description = "Default";
+    public virtual char Symbol => 'A';
 
     public required string Description
     {

@@ -16,22 +16,22 @@ public abstract class Map
     public abstract Point Next(Point p, Direction d);
 
     /// <summary>
-    /// Next diagonal position to the point in a given direction.
+    /// Next diagonal position to the point in a given direction rotated 45 degrees clockwise.
     /// </summary>
     public abstract Point NextDiagonal(Point p, Direction d);
 
     /// <summary>
-    /// Adds an object to the specified point on the map.
+    /// Get all objects located at the given point on the map.
+    /// </summary>
+    public abstract List<IMappable> At(Point p);
+
+    /// <summary>
+    /// Add an object to the map at the specified point.
     /// </summary>
     public abstract void Add(Point p, IMappable obj);
 
     /// <summary>
-    /// Removes an object from the specified point on the map.
+    /// Remove an object from the map at the specified point.
     /// </summary>
     public abstract void Remove(Point p, IMappable obj);
-
-    /// <summary>
-    /// Returns all objects at the specified point.
-    /// </summary>
-    public abstract List<IMappable> At(Point p);
 }

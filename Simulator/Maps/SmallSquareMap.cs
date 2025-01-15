@@ -1,11 +1,9 @@
 ﻿namespace Simulator.Maps;
-/// <summary>
-/// Represents a map with square boundaries.
-/// </summary>
+
 public class SmallSquareMap : Map
 {
     public int Size { get; }
-    private readonly Dictionary<Point, List<IMappable>> _map;
+    private readonly Dictionary<Point, List<IMappable>> _map = new();
 
     public SmallSquareMap(int size)
     {
@@ -13,7 +11,6 @@ public class SmallSquareMap : Map
         {
             throw new ArgumentOutOfRangeException(nameof(size), "Size must be between 5 and 20.");
         }
-
         Size = size;
     }
 
@@ -22,20 +19,10 @@ public class SmallSquareMap : Map
         return p.X >= 0 && p.X < Size && p.Y >= 0 && p.Y < Size;
     }
 
-    public override Point Next(Point p, Direction d)
-    {
-        Point next = p.Next(d);
-        return Exist(next) ? next : p;
-    }
-    public override Point NextDiagonal(Point p, Direction d)
-    {
-        Point next = p.NextDiagonal(d);
-        return Exist(next) ? next : p;
-    }
-    public override List<IMappable> At(Point p)
-    {
-        return _map.ContainsKey(p) ? _map[p] : new List<IMappable>();
-    }
+    public override Point Next(Point p, Direction d) => p.Next(d);
+
+    public override Point NextDiagonal(Point p, Direction d) => p.NextDiagonal(d);
+
     public override void Add(Point p, IMappable obj)
     {
         if (!Exist(p))
@@ -64,4 +51,8 @@ public class SmallSquareMap : Map
         }
     }
 
+    public override List<IMappable> At(Point p)
+    {
+        return _map.ContainsKey(p) ? _map[p] : new List<IMappable>();
+    }
 }

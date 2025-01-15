@@ -4,9 +4,8 @@ namespace Simulator.Maps;
 
 public class SmallTorusMap : Map
 {
-
     public int Size { get; }
-    private readonly Dictionary<Point, List<IMappable>> _map;
+    private readonly Dictionary<Point, List<IMappable>> _map = new();
 
     public SmallTorusMap(int size)
     {
@@ -17,6 +16,7 @@ public class SmallTorusMap : Map
 
         Size = size;
     }
+
     public override bool Exist(Point p)
     {
         return p.X >= 0 && p.X < Size && p.Y >= 0 && p.Y < Size;
@@ -29,6 +29,7 @@ public class SmallTorusMap : Map
         int y = (next.Y + Size) % Size;
         return new Point(x, y);
     }
+
     public override Point NextDiagonal(Point p, Direction d)
     {
         var next = p.NextDiagonal(d);
@@ -36,16 +37,16 @@ public class SmallTorusMap : Map
         int y = (next.Y + Size) % Size;
         return new Point(x, y);
     }
+
     public override List<IMappable> At(Point p)
     {
         Point wrappedPoint = WrapPoint(p);
         return _map.ContainsKey(wrappedPoint) ? _map[wrappedPoint] : new List<IMappable>();
     }
+
     /// <summary>
-    /// Zawija punkt na toroidalnej mapie.
+    /// Wraps a point to fit the toroidal map dimensions.
     /// </summary>
-    /// <param name="p">Punkt do zawinięcia.</param>
-    /// <returns>Zawinięty punkt.</returns>
     private Point WrapPoint(Point p)
     {
         int x = (p.X + Size) % Size;
@@ -78,5 +79,4 @@ public class SmallTorusMap : Map
             }
         }
     }
-
 }

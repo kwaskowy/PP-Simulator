@@ -1,9 +1,14 @@
 ﻿namespace Simulator;
 
 public abstract class Creature : IMappable
-{ 
+{
     private string _name = "Unknown";
     private int _level = 1;
+
+    /// <summary>
+    /// Symbol reprezentujący stwora na mapie.
+    /// </summary>
+    public abstract char Symbol { get; }
 
     public string Name
     {
@@ -38,6 +43,9 @@ public abstract class Creature : IMappable
 
     public abstract string Info { get; }
 
+    /// <summary>
+    /// Zwraca opis stwora.
+    /// </summary>
     public override string ToString()
     {
         return $"{GetType().Name.ToUpper()}: {Info}";
@@ -71,5 +79,9 @@ public abstract class Creature : IMappable
         var directions = DirectionParser.Parse(input);
         Go(directions);
     }
+
+    /// <summary>
+    /// Zwraca opis do wizualizacji.
+    /// </summary>
     public string Description => $"{Name} (Level {Level})";
 }
