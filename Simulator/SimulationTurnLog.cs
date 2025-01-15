@@ -6,12 +6,7 @@
 public class SimulationTurnLog
 {
     /// <summary>
-    /// Numer tury.
-    /// </summary>
-    public required int TurnNumber { get; init; }
-
-    /// <summary>
-    /// Obiekt, który wykonywał ruch w tej turze.
+    /// Creature that moved in this turn.
     /// </summary>
     public required Creature Creature { get; init; }
 
@@ -24,4 +19,9 @@ public class SimulationTurnLog
     /// Dictionary of IMappable.Symbol on the map in this turn.
     /// </summary>
     public required Dictionary<Point, char> Symbols { get; init; }
+
+    /// <summary>
+    /// Turn number (optional for clarity in debugging).
+    /// </summary>
+    public int TurnNumber { get; init; }
 }

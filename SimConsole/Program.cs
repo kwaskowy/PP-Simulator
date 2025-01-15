@@ -24,7 +24,6 @@ class Program
             new Birds { Description = "Ostriches", Size = 3, CanFly = false }
         };
 
-        // Pozycje początkowe
         var positions = new List<Point>
         {
             new Point(2, 2), // Elf
@@ -34,7 +33,6 @@ class Program
             new Point(7, 5)  // Ostriches
         };
 
-        // Dodanie stworzeń i zwierząt na mapę
         for (int i = 0; i < positions.Count; i++)
         {
             if (i < creatures.Count)
@@ -47,22 +45,13 @@ class Program
 
         var simulation = new Simulation(map, creatures, positions.Take(creatures.Count).ToList(), moves);
         var simulationHistory = new SimulationHistory(simulation);
+        var logVisualizer = new LogVisualizer(simulationHistory);
 
         // Wyświetl wybrane tury: 5, 10, 15, 20
         int[] turnsToDisplay = { 5, 10, 15, 20 };
         foreach (int turn in turnsToDisplay)
         {
-            Console.Clear();
-            var snapshot = simulationHistory.GetTurn(turn);
-            Console.WriteLine($"Turn {snapshot.TurnNumber}:");
-            Console.WriteLine($"Creature: {snapshot.Creature.Name} moves {snapshot.Move}");
-
-            // Odtwórz stan mapy na podstawie tury
-            simulation.LoadTurn(snapshot);
-
-            var visualizer = new MapVisualizer(map, simulation);
-            visualizer.Draw();
-
+            logVisualizer.Draw(turn - 1); // Indeks tury w liście zaczyna się od 0
             Console.WriteLine("\nPress any key to see the next turn...");
             Console.ReadKey();
         }
