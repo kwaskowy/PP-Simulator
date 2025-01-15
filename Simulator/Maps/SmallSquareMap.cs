@@ -5,6 +5,9 @@ public class SmallSquareMap : Map
     public int Size { get; }
     private readonly Dictionary<Point, List<IMappable>> _map = new();
 
+    public override int SizeX => Size;
+    public override int SizeY => Size;
+
     public SmallSquareMap(int size)
     {
         if (size < 5 || size > 20)

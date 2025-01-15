@@ -5,6 +5,7 @@ namespace Simulator.Maps;
 public class SmallTorusMap : Map
 {
     public int Size { get; }
+
     private readonly Dictionary<Point, List<IMappable>> _map = new();
 
     public SmallTorusMap(int size)
@@ -16,6 +17,10 @@ public class SmallTorusMap : Map
 
         Size = size;
     }
+
+    public override int SizeX => Size;
+
+    public override int SizeY => Size;
 
     public override bool Exist(Point p)
     {

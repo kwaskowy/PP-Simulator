@@ -1,60 +1,85 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+
+namespace Simulator;
 
 public class SimulationHistory
 {
     private readonly Simulation _simulation;
-    private readonly List<TurnSnapshot> _history;
+    public int SizeX { get; }
+    public int SizeY { get; }
+    public List<SimulationTurnLog> TurnLogs { get; } = new();
 
     public SimulationHistory(Simulation simulation)
     {
         _simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
-        _history = new List<TurnSnapshot>();
-
-        RunSimulation();
+        SizeX = GetMapSizeX(simulation.Map);
+        SizeY = GetMapSizeY(simulation.Map);
+        Run();
     }
 
-    public TurnSnapshot GetTurn(int turnNumber)
+    private void Run()
     {
-        if (turnNumber < 1 || turnNumber > _history.Count)
+        // Zapisz stan początkowy mapy
+        LogTurn();
+
+        // Przeprowadź całą symulację
+        while (!_simulation.Finished)
+        {
+            _simulation.Turn();
+            LogTurn();
+        }
+    }
+
+    private void LogTurn()
+    {
+        var symbols = new Dictionary<Point, char>();
+
+        // Iteruj przez punkty na mapie i zapisuj symbole obiektów
+        for (int x = 0; x < SizeX; x++)
+        {
+            for (int y = 0; y < SizeY; y++)
+            {
+                var point = new Point(x, y);
+                var objectsAtPoint = _simulation.Map.At(point);
+
+                if (objectsAtPoint.Any())
+                {
+                    symbols[point] = objectsAtPoint.Count > 1 ? 'X' : objectsAtPoint.First().Symbol;
+                }
+            }
+        }
+
+        // Zapisz stan tury
+        TurnLogs.Add(new SimulationTurnLog
+        {
+            TurnNumber = TurnLogs.Count + 1,
+            Creature = _simulation.CurrentCreature,
+            Move = _simulation.CurrentMoveName,
+            Symbols = symbols
+        });
+    }
+
+    public SimulationTurnLog GetTurn(int turnNumber)
+    {
+        if (turnNumber < 1 || turnNumber > TurnLogs.Count)
         {
             throw new ArgumentOutOfRangeException(nameof(turnNumber), "Invalid turn number.");
         }
 
-        return _history[turnNumber - 1];
+        return TurnLogs[turnNumber - 1];
     }
 
-    private void RunSimulation()
+    private static int GetMapSizeX(Map map)
     {
-        while (!_simulation.Finished)
-        {
-            // Zapisz stan przed ruchem.
-            var snapshot = new TurnSnapshot(
-                turnNumber: _history.Count + 1,
-                creature: _simulation.CurrentCreature,
-                move: _simulation.CurrentMoveName,
-                positions: new Dictionary<Creature, Point>(_simulation.Creatures.Zip(_simulation.Positions, (c, p) => new KeyValuePair<Creature, Point>(c, p)))
-            );
-
-            _history.Add(snapshot);
-
-            // Wykonaj ruch.
-            _simulation.Turn();
-        }
+        return map is SmallSquareMap smallMap ? smallMap.Size
+             : map is BigMap bigMap ? bigMap.Width
+             : throw new InvalidOperationException("Unsupported map type.");
     }
 
-    public class TurnSnapshot
+    private static int GetMapSizeY(Map map)
     {
-        public int TurnNumber { get; }
-        public Creature Creature { get; }
-        public string Move { get; }
-        public IReadOnlyDictionary<Creature, Point> Positions { get; }
-
-        public TurnSnapshot(int turnNumber, Creature creature, string move, Dictionary<Creature, Point> positions)
-        {
-            TurnNumber = turnNumber;
-            Creature = creature ?? throw new ArgumentNullException(nameof(creature));
-            Move = move ?? throw new ArgumentNullException(nameof(move));
-            Positions = new Dictionary<Creature, Point>(positions);
-        }
+        return map is SmallSquareMap smallMap ? smallMap.Size
+             : map is BigMap bigMap ? bigMap.Height
+             : throw new InvalidOperationException("Unsupported map type.");
     }
 }

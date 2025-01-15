@@ -4,6 +4,10 @@ public class BigMap : Map
 {
     public int Width { get; }
     public int Height { get; }
+
+    public override int SizeX => Width;
+    public override int SizeY => Height;
+
     private readonly Dictionary<Point, List<IMappable>> _map = new();
 
     public BigMap(int width, int height)
