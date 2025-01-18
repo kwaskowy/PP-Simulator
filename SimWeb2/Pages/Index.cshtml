@@ -1,0 +1,84 @@
+﻿@page
+@using Simulator
+@model SimWeb2.Pages.IndexModels
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        /* Nie zmieniamy stylów dla grid-container i grid-item */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(@Model.SizeX, 50px);
+            grid-template-rows: repeat(@Model.SizeY, 50px);
+            gap: 1px;
+            background-color: transparent;
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+
+        .simulation-container{
+            text-align:center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Główna zawartość w kontenerze -->
+    <div class="container my-5">
+        <!-- Nagłówek -->
+        <header class="text-center mb-4">
+            <h1 class="display-5 fw-bold">Tura: @Model.CurrentTurn</h1>
+        </header>
+
+        <!-- Grid z symulacją -->
+        <div class="simulation-container">
+        <div class="grid-container mx-auto">
+            @foreach (var y in Enumerable.Range(0, @Model.SizeY))
+            {
+                @foreach (var x in Enumerable.Range(0, @Model.SizeX))
+                {
+                    <div class="grid-item">
+                        @(@Model.Symbols.TryGetValue(new Point(x, y), out char symbol) ? symbol : ' ')
+                    </div>
+                }
+            }
+        </div>
+        </div>
+
+        <!-- Przyciski nawigacyjne -->
+        <div class="d-flex justify-content-center mt-4">
+            @if (@Model.CurrentTurn > 1)
+            {
+                <a asp-page="/Index" asp-route-turn="@(Model.CurrentTurn - 1)" class="btn btn-primary me-2">
+                    <i class="bi bi-arrow-left-circle"></i> Poprzednia tura
+                </a>
+            }
+
+            @if (@Model.CurrentTurn < @Model.TotalTurns)
+            {
+                <a asp-page="/Index" asp-route-turn="@(Model.CurrentTurn + 1)" class="btn btn-success">
+                    Następna tura <i class="bi bi-arrow-right-circle"></i>
+                </a>
+            }
+        </div>
+    </div>
+
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

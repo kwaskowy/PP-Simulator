@@ -1,0 +1,47 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Info";
+}
+<div class="container my-5">
+    <header class="text-center mb-4">
+        <h1 class="display-4 fw-bold text-dark">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Informacje o projekcie SimWeb</p>
+    </header>
+
+    <section class="mb-4">
+        <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body">
+                <h2 class="card-title text-dark">O projekcie</h2>
+                <p class="card-text fs-5 text-secondary">
+                    SimWeb to projekt stworzony z wykorzystaniem technologii <strong>Razor Pages</strong> w ASP.NET Core.
+                    Aplikacja pozwala na symulację ruchów istot na mapie.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-4">
+        <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body">
+                <h2 class="card-title text-dark">Sekwencja ruchów</h2>
+                <p class="card-text fs-5 text-secondary">
+                    W tej symulacji sekwencja ruchów została zdefiniowana jako:
+                </p>
+                <div class="alert alert-secondary text-center fs-4 fw-bold">
+                    rrddlluurr
+                </div>
+                <p class="card-text text-secondary">
+                    Każda litera oznacza ruch w odpowiednim kierunku:
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-light text-dark"><strong>r</strong> - Prawo (right)</li>
+                        <li class="list-group-item bg-light text-dark"><strong>d</strong> - Dół (down)</li>
+                        <li class="list-group-item bg-light text-dark"><strong>l</strong> - Lewo (left)</li>
+                        <li class="list-group-item bg-light text-dark"><strong>u</strong> - Góra (up)</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    </section>
+
+</div>

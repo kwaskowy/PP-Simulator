@@ -1,0 +1,58 @@
+﻿@page
+@model Simulator.SimulationHistory
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation History</title>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(@Model.SizeX, 1fr);
+            grid-gap: 2px;
+            background-color: #ccc;
+        }
+
+        .cell {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simulation History</h1>
+
+    @if (Model?.TurnLogs != null && Model.TurnLogs.Count > 0)
+    {
+        <div>
+            @foreach (var log in Model.TurnLogs)
+            {
+                <h2>Turn @log.TurnNumber</h2>
+                <div class="grid" style="grid-template-columns: repeat(@Model.SizeX, 1fr);">
+                    @for (int y = 0; y < Model.SizeY; y++)
+                    {
+                        @for (int x = 0; x < Model.SizeX; x++)
+                        {
+                            var point = new Simulator.Point(x, y);
+                            <div class="cell">
+                                @log.Symbols.TryGetValue(point, out var symbol) ? symbol : '.'
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No simulation history available.</p>
+    }
+</body>
+</html>
